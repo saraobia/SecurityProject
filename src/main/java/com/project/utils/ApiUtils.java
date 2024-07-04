@@ -18,7 +18,7 @@ public class ApiUtils {
                 "/webjars/**",
                 "/v3/api-docs",
                 "/v3/api-docs/swagger-config",
-                "/ecommerce/api/v1/auth/login"};
+                "/api/auth/login"};
         return permit;
     }
 }

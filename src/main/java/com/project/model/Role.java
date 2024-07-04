@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -20,12 +22,13 @@ public class Role {
     @Column(name = "id_role")
     private Integer id;
 
+    //TODO: unique true?
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", unique = true)
+    @Column(name = "role")
     private RoleCode role;
 
-    @OneToOne(mappedBy = "role", cascade = CascadeType.ALL)
-    private User user;
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private List<User> users;
 
 }
 

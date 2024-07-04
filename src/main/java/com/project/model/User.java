@@ -13,11 +13,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
-    @Column(name = "id_user")
-    String idUser;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer idUser;
 
     @Column(name = "name")
     private String name;
@@ -31,7 +33,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_role", referencedColumnName = "id_role")
     private Role role;
 

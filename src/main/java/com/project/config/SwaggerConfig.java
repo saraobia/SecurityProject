@@ -30,8 +30,8 @@ public class SwaggerConfig {
                    )
 
             ).info(new Info()
-                   .title("Base ecommerce API")
-                   .description("API Rest that offers services for basic ecommerce")
+                   .title("Super Security API")
+                   .description("API Rest for testing security")
                    .version("1.0"));
     }
 }
