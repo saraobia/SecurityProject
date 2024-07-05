@@ -1,6 +1,8 @@
 package com.project.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,9 +11,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -19,7 +24,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer idUser;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -33,14 +38,18 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "id_role", referencedColumnName = "id_role")
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getRole().name()));
+   /*     return List.of(new SimpleGrantedAuthority(roles.stream()
+                    .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
+                    .collect(Collectors.toList());*/
+        return null;
     }
 
     @Override

@@ -1,6 +1,7 @@
-package com.project.model;
+package com.project.model.dto.request;
 
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 public class AuthRequest {
