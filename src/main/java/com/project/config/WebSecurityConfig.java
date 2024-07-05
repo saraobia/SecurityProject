@@ -5,6 +5,7 @@ import com.project.model.enums.ErrorCode;
 import com.project.model.enums.RoleCode;
 import com.project.response.ErrorResponse;
 import com.project.utils.ApiUtils;
+import com.project.utils.SessionInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
