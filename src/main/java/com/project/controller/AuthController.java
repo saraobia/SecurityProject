@@ -34,24 +34,6 @@ public class AuthController {
     @Autowired
     private AuthenticationService authenticationService;
 
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) throws UserNotFoundException, UserPasswordWrongException, UserGenericsException, UserMailWrongException {
-//        String email = authRequest.getEmail();
-//        String password = authRequest.getPassword();
-//
-//        boolean isAuthenticated = userService.login(email, password);
-//        if (isAuthenticated) {
-//            Optional<User> optUser = userService.getUserByEmail(email);
-//            if (optUser.isPresent()) {
-//                String token = jwtUtils.generateToken(optUser.get());
-//                return ResponseEntity.ok(token);
-//            }
-//            throw new UserNotFoundException(email);
-//        }
-//        //CONDITION NOT AUTHENTICATED
-//        throw new UserPasswordWrongException(email);
-//    }
-
     @PostMapping("/login")
     public ResponseEntity<SuccessResponse<AuthenticationResponse>> login(@RequestBody AuthRequest request) throws UserNotFoundException, UserPasswordWrongException, UserGenericsException, UserMailWrongException {
          return new ResponseEntity<>(new SuccessResponse<>(authenticationService.authentication(request)), HttpStatus.OK);
