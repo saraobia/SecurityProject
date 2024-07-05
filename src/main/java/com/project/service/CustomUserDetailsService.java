@@ -1,6 +1,9 @@
 package com.project.service;
 
+import com.project.exception.UserException;
+import com.project.model.enums.ErrorCode;
 import com.project.repository.UserRepository;
+import com.project.response.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,8 +18,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //return userRepository.findByEmail(username).get();
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserException(
+                new ErrorResponse(ErrorCode.EUN, "User not found with email: " + email)
+        ));
     }
 }

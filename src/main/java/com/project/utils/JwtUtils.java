@@ -53,7 +53,7 @@ public class JwtUtils {
     private String buildToken(Map<String, Object> extraClaims, User user, long expiration) {
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .setId(String.valueOf(user.getIdUser()))
+                .setId(String.valueOf(user.getId()))
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))

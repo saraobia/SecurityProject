@@ -19,16 +19,13 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_role")
+    @Column(name = "id")
     private Integer id;
 
     //TODO: unique true?
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", unique = true)
     private RoleCode role;
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    private List<User> users;
 
 }
 

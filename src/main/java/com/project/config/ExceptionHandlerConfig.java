@@ -1,5 +1,6 @@
 package com.project.config;
 
+import com.project.exception.UserException;
 import com.project.model.enums.ErrorCode;
 import com.project.response.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -29,6 +31,13 @@ import java.util.NoSuchElementException;
 public class ExceptionHandlerConfig {
 
     private static final Logger log = LoggerFactory.getLogger(ExceptionHandlerConfig.class);
+
+
+    @ExceptionHandler({UserException.class, InternalAuthenticationServiceException.class})
+    public ResponseEntity<ErrorResponse> handleUserException(UserException e) {
+        logStacktrace(e.getResponse(), e);
+        return new ResponseEntity<>(e.getResponse(), e.getResponse().getStatus());
+    }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorResponse> noHandlerFoundException(NoHandlerFoundException e) {
