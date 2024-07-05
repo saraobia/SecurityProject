@@ -6,9 +6,13 @@ import com.project.exception.UserNotFoundException;
 import com.project.exception.UserPasswordWrongException;
 import com.project.model.AuthRequest;
 import com.project.model.User;
+import com.project.model.dto.AuthenticationResponse;
+import com.project.response.SuccessResponse;
+import com.project.service.AuthenticationService;
 import com.project.service.UserService;
 import com.project.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,23 +31,32 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) throws UserNotFoundException, UserPasswordWrongException, UserGenericsException, UserMailWrongException {
-        String email = authRequest.getEmail();
-        String password = authRequest.getPassword();
+    @Autowired
+    private AuthenticationService authenticationService;
 
-        boolean isAuthenticated = userService.login(email, password);
-        if (isAuthenticated) {
-            Optional<User> optUser = userService.getUserByEmail(email);
-            if (optUser.isPresent()) {
-                String token = jwtUtils.generateToken(optUser.get());
-                return ResponseEntity.ok(token);
-            }
-            throw new UserNotFoundException(email);
-        }
-        //CONDITION NOT AUTHENTICATED
-        throw new UserPasswordWrongException(email);
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) throws UserNotFoundException, UserPasswordWrongException, UserGenericsException, UserMailWrongException {
+//        String email = authRequest.getEmail();
+//        String password = authRequest.getPassword();
+//
+//        boolean isAuthenticated = userService.login(email, password);
+//        if (isAuthenticated) {
+//            Optional<User> optUser = userService.getUserByEmail(email);
+//            if (optUser.isPresent()) {
+//                String token = jwtUtils.generateToken(optUser.get());
+//                return ResponseEntity.ok(token);
+//            }
+//            throw new UserNotFoundException(email);
+//        }
+//        //CONDITION NOT AUTHENTICATED
+//        throw new UserPasswordWrongException(email);
+//    }
+
+    @PostMapping("/login")
+    public ResponseEntity<SuccessResponse<AuthenticationResponse>> login(@RequestBody AuthRequest request) throws UserNotFoundException, UserPasswordWrongException, UserGenericsException, UserMailWrongException {
+         return new ResponseEntity<>(new SuccessResponse<>(authenticationService.authentication(request)), HttpStatus.OK);
     }
+
 }
 
 
