@@ -9,6 +9,7 @@ import com.project.model.dto.AuthenticationResponse;
 import com.project.response.SuccessResponse;
 import com.project.service.AuthenticationService;
 import com.project.utils.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<SuccessResponse<AuthenticationResponse>> login(@RequestBody AuthRequest request) throws UserNotFoundException, UserPasswordWrongException, UserGenericsException, UserMailWrongException {
          return new ResponseEntity<>(new SuccessResponse<>(authenticationService.authentication(request)), HttpStatus.OK);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<SuccessResponse<AuthenticationResponse>> refreshToken(HttpServletRequest request) throws UserNotFoundException, UserPasswordWrongException, UserGenericsException, UserMailWrongException {
+        return new ResponseEntity<>
+                (new SuccessResponse<>
+                        (authenticationService.refreshToken(request)), HttpStatus.OK);
     }
 
 }

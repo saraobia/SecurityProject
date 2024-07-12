@@ -42,16 +42,16 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
-    private User getUserFromToken(HttpServletRequest request) {
+    public User getUserFromToken(HttpServletRequest request) {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new UserException
-                    (new ErrorResponse(ErrorCode.BR, "Missing or invalid Beare token"));
+                    (new ErrorResponse(ErrorCode.BR, "Missing or invalid Bearer token"));
         }
-        String accessToken = authHeader.substring(7);
-        String email = jwtUtils.extractEmail(accessToken);
+        String token = authHeader.substring(7);
+        String email = jwtUtils.extractEmail(token);
         UserDetails userDetails = this.loadUserByUsername(email);
-        if(!jwtUtils.isTokenValid(accessToken, userDetails)) {
+        if(!jwtUtils.isTokenValid(token, userDetails)) {
             throw new UserException
                     (new ErrorResponse(ErrorCode.BR, "Token is not valid or expired"));
         }

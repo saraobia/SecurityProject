@@ -9,8 +9,10 @@ import com.project.repository.RoleRepository;
 import com.project.repository.UserRepository;
 import com.project.response.ErrorResponse;
 import com.project.utils.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -41,6 +43,9 @@ public class AuthenticationService {
     @Autowired
     UserDetailsService userDetailsService;
 
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
+
     public AuthenticationResponse authentication(AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
@@ -48,6 +53,14 @@ public class AuthenticationService {
         User user = userRepository
                 .findByEmail(request.getEmail())
                 .orElseThrow(() -> new AuthException(new ErrorResponse(ErrorCode.EUN, "User not found")));
+        return AuthenticationResponse.builder()
+                .accessToken(jwtUtils.generateToken(user))
+                .refreshToken(jwtUtils.generateRefreshToken(user))
+                .build();
+    }
+
+    public AuthenticationResponse refreshToken(HttpServletRequest request){
+        User user = customUserDetailsService.getUserFromToken(request);
         return AuthenticationResponse.builder()
                 .accessToken(jwtUtils.generateToken(user))
                 .refreshToken(jwtUtils.generateRefreshToken(user))
