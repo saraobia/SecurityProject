@@ -1,9 +1,11 @@
 package com.project.service;
 
 import com.project.exception.UserException;
+import com.project.model.dto.UserDTO;
 import com.project.model.enums.ErrorCode;
 import com.project.repository.UserRepository;
 import com.project.response.ErrorResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,4 +25,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new ErrorResponse(ErrorCode.EUN, "User not found with email: " + email)
         ));
     }
+
+    public UserDTO loadUser(HttpServletRequest request) {
+
+    }
+
 }

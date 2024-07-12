@@ -19,5 +19,7 @@ public class ApiUtils {
                 "/v3/api-docs",
                 "/v3/api-docs/swagger-config",
                 "/api/auth/login"};
+    public static String[] PERMIT_USER = {};
+
 
 }
