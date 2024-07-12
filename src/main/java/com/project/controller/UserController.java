@@ -5,6 +5,7 @@ import com.project.response.SuccessResponse;
 import com.project.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,8 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<SuccessResponse<UserDTO>> getUser(HttpServletRequest request) {
-        request.getHeader();
-        return new ResponseEntity<>(new SuccessResponse<>());
+        return new ResponseEntity<>
+                (new SuccessResponse<>
+                        (customUserDetailsService.loadUser(request)), HttpStatus.OK);
     }
 }

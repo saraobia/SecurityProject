@@ -1,12 +1,14 @@
 package com.project.service;
 
+import com.project.exception.AuthException;
 import com.project.model.AuthRequest;
 import com.project.model.User;
 import com.project.model.dto.AuthenticationResponse;
+import com.project.model.enums.ErrorCode;
 import com.project.repository.RoleRepository;
 import com.project.repository.UserRepository;
+import com.project.response.ErrorResponse;
 import com.project.utils.JwtUtils;
-import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,10 +45,12 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        Optional<User> user = userRepository.findByEmail(request.getEmail());//.orElseThrow(() -> new AuthException(new Err));
+        User user = userRepository
+                .findByEmail(request.getEmail())
+                .orElseThrow(() -> new AuthException(new ErrorResponse(ErrorCode.EUN, "User not found")));
         return AuthenticationResponse.builder()
-                .accessToken(jwtUtils.generateToken(user.get()))
-                .refreshToken(jwtUtils.generateRefreshToken(user.get()))
+                .accessToken(jwtUtils.generateToken(user))
+                .refreshToken(jwtUtils.generateRefreshToken(user))
                 .build();
     }
 }
